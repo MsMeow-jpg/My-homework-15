@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Fallout Journal</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    /* ===== SLOW FALLOUT GLITCH ===== */
+    .glitch {
+      position: relative;
+      display: inline-block;
+    }
+    .glitch::before,
+    .glitch::after {
+      content: attr(data-text);
+      position: absolute;
+      left: 0;
+      width: 100%;
+      opacity: 0;
+    }
+    .glitch::before {
+      color: #00ff66;
+      text-shadow: -1px 0 #00ff66;
+      animation: glitchTop 8s infinite;
+    }
+    .glitch::after {
+      color: #00cc55;
+      text-shadow: 1px 0 #00cc55;
+      animation: glitchBottom 9s infinite;
+    }
+    @keyframes glitchTop {
+      0%, 92% { opacity: 0; transform: translate(0, 0); }
+      93% { opacity: 1; transform: translate(-2px, -1px); }
+      95% { transform: translate(2px, 0); }
+      96% { opacity: 0; }
+      100% { opacity: 0; }
+    }
+    @keyframes glitchBottom {
+      0%, 94% { opacity: 0; transform: translate(0, 0); }
+      95% { opacity: 1; transform: translate(2px, 1px); }
+      97% { transform: translate(-2px, 0); }
+      98% { opacity: 0; }
+      100% { opacity: 0; }
+    }
+
+    /* ===== CRT ===== */
+    .crt {
+      pointer-events: none;
+      position: fixed;
+      inset: 0;
+      background: repeating-linear-gradient(
+        to bottom,
+        rgba(0,255,100,0.04),
+        rgba(0,255,100,0.04) 1px,
+        transparent 2px,
+        transparent 4px
+      );
+      animation: flicker 3s infinite;
+      z-index: 100;
+    }
+    @keyframes flicker {
+      0%, 100% { opacity: 0.85; }
+      50% { opacity: 0.75; }
+    }
+
+    /* Concise style for notes */
+    .toggle-content {
+      overflow: hidden;
+      transition: max-height 0.5s ease, opacity 0.5s ease;
+      max-height: 0;
+      opacity: 0;
+    }
+    .toggle-content.open {
+      max-height: 500px;
+      opacity: 1;
+    }
+  </style>
+</head>
+
+<body class="bg-black text-green-400 font-mono min-h-screen flex flex-col">
+
+<div class="crt"></div>
+
+<!-- HEADER -->
+<header class="p-6 border-b border-green-600 text-center select-none">
+  <div class="mt-4 max-w-xl mx-auto border border-green-600 p-4 bg-black/80 rounded-md">
+    <div class="flex justify-between text-xs tracking-widest text-green-300">
+      <span>VAULT-TEC PERSONAL LOG</span>
+      <span>v.101</span>
+    </div>
+    <div class="mt-3 space-y-1 text-sm">
+      <div class="flex justify-between">
+        <span class="text-green-500">ACCESS LEVEL</span>
+        <span class="text-green-300">RESIDENT</span>
+      </div>
+      <div class="flex justify-between">
+        <span class="text-green-500">STATUS</span>
+        <span class="text-green-400 animate-pulse">ACTIVE</span>
+      </div>
+    </div>
+    <div class="mt-3 h-[1px] bg-green-600/50"></div>
+    <div class="mt-2 text-[10px] text-green-500 tracking-widest uppercase">
+      property of vault-tec corporation
+    </div>
+  </div>
+
+  <p class="mt-4 text-green-300 uppercase text-sm glitch" data-text="post-apocalyptic thoughts terminal">
+    post-apocalyptic thoughts terminal
+  </p>
+</header>
+
+<!-- MAIN -->
+<main class="flex-1 p-6 max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-6">
+
+  <!-- LEFT BLOCK:-->
+  <div class="md:col-span-2 border border-green-600 rounded-md p-4 bg-black/80 flex flex-col items-center space-y-6">
+    <h2 class="text-2xl font-bold glitch" data-text="GALLERY">
+      GALLERY
+    </h2>
+
+    <div class="flex justify-center w-full gap-6">
+      <img src="nuka.jpg" alt="Nuka Cola" class="rounded-md shadow-lg w-[30%] object-contain" />
+      <img src="pip.jpg" alt="Pip Boy" class="rounded-md shadow-lg w-[30%] object-contain" />
+    </div>
+
+    <div class="flex items-center space-x-4 bg-black border border-green-600 rounded-md p-4 w-full max-w-md mt-6">
+      <audio id="audioPlayer" src="The World On Fire.mp3" loop></audio>
+      <button
+        id="audioToggleBtn"
+        class="px-4 py-2 border border-green-600 rounded hover:bg-green-700 transition text-green-400 font-mono"
+        aria-pressed="false"
+      >
+        🔈 Off
+      </button>
+      <span class="text-green-400 font-mono select-none">The World On Fire</span>
+    </div>
+
+    <div class="flex-grow rounded-md overflow-hidden shadow-lg w-full mt-6">
+      <iframe
+        class="w-full h-full"
+        src="https://www.youtube.com/embed/n5VlB4PNje4"
+        title="YouTube video player"
+        frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen>
+      </iframe>
+    </div>
+  </div>
+
+  <!-- RIGHT -->
+  <div class="md:col-span-2 flex flex-col space-y-4">
+    <h2 class="text-2xl font-bold mb-4 glitch" data-text="VAULT-TEC Journal">
+      VAULT-TEC Journal
+    </h2>
+
+    <!-- Record #1 -->
+    <section class="border border-green-600 p-3 rounded-md flex flex-col">
+      <button
+        id="record1"
+        class="w-full flex items-center justify-between text-left text-lg hover:text-green-300 transition toggle-btn"
+        aria-expanded="false"
+      >
+        <span>Record #1</span>
+        <span class="toggle-icon text-xl">▸</span>
+      </button>
+      <div class="toggle-content">
+        <div class="text-green-300 p-2">
+          A day… honestly, I don’t count anymore.<br>
+          The clocks here work better than people.<br>
+          <br>
+          Vault-Tec says we’re safe.<br>
+          Vault-Tec always says something.<br>
+          The walls are thick, the doors are heavy, the smiles are trained.<br>
+          There’s no radiation outside.<br>
+          But inside, it’s full.<br>
+          I started to notice little things:<br>
+          The cameras watch longer than they should,<br>
+          Announcements are repeated with a strange intonation,<br>
+          And yesterday my neighbor from sector C simply stopped leaving his room.<br>
+          He’s on the lists.<br>
+          In life, he’s not.
+        </div>
+      </div>
+    </section>
+
+    <!-- Record №4 -->
+    <section class="border border-green-600 p-3 rounded-md flex flex-col">
+      <button
+        id="record4"
+        class="w-full flex items-center justify-between text-left text-lg hover:text-green-300 transition toggle-btn"
+        aria-expanded="false"
+      >
+        <span>Record №4</span>
+        <span class="toggle-icon text-xl">▸</span>
+      </button>
+      <div class="toggle-content">
+        <div class="text-green-300 p-2">
+          Today we were told again that the experiment is “for science.”<br>
+          I wonder if science knows it hurts.<br>
+          <br>
+          Drawing on the back of Vault-Tec instructions.<br>
+          A face without eyes.<br>
+          Hands reaching through metal.<br>
+          Radiation looks more beautiful than their posters.<br>
+          <br>
+          If this place is a utopia,<br>
+          why does it make you want to scream so much?
+        </div>
+      </div>
+    </section>
+
+    <!-- Record №7 -->
+    <section class="border border-green-600 p-3 rounded-md flex flex-col">
+      <button
+        id="record7"
+        class="w-full flex items-center justify-between text-left text-lg hover:text-green-300 transition toggle-btn"
+        aria-expanded="false"
+      >
+        <span>Record №7</span>
+        <span class="toggle-icon text-xl">▸</span>
+      </button>
+      <div class="toggle-content">
+        <div class="text-green-300 p-2">
+          It's funny.<br>
+          We're afraid of mutants on the outside,<br>
+          but the real mutations are in the minds.<br>
+          People become obedient.<br>
+          Quiet.<br>
+          Correct.<br>
+          I'm not.<br>
+          And that seems to be the problem.
+        </div>
+      </div>
+    </section>
+
+    <!-- Record №11 -->
+    <section class="border border-green-600 p-3 rounded-md flex flex-col">
+      <button
+        id="record11"
+        class="w-full flex items-center justify-between text-left text-lg hover:text-green-300 transition toggle-btn"
+        aria-expanded="false"
+      >
+        <span>Record №11</span>
+        <span class="toggle-icon text-xl">▸</span>
+      </button>
+      <div class="toggle-content">
+        <div class="text-green-300 p-2">
+          If you're reading this,<br>
+          I've either escaped,<br>
+          or been "transferred."<br><br>
+          Remember:<br>
+          Vault-Tec doesn't build vaults.<br>
+          Vault-Tec builds stories,<br>
+          where you're just a variable.<br>
+          <br>
+          If the door ever opens,<br>
+          don't look back.<br>
+          Freedom is always a little radioactive.<br>
+          <br>
+          <strong>END OF LOG</strong><br>
+          <strong>REMEMBER: VAULT-TEC CARES</strong>
+        </div>
+      </div>
+    </section>
+  </div>
+
+</main>
+
+<!-- MENU -->
+<aside
+  id="sideMenu"
+  class="fixed top-4 right-4 w-80 bg-black border-2 border-green-600 p-4 rounded-md
+         translate-y-[-120%] transition-transform duration-300 z-40 shadow-lg"
+>
+  <button id="closeMenuBtn" class="w-full mb-4 border border-green-600 py-2 rounded hover:bg-green-700 transition">
+    Close Vault Enrollment
+  </button>
+
+  <form class="space-y-3">
+    <input class="w-full bg-black border border-green-600 p-2 rounded text-green-300 placeholder-green-600" placeholder="Name" />
+    <input class="w-full bg-black border border-green-600 p-2 rounded text-green-300 placeholder-green-600" placeholder="Age" />
+    <textarea class="w-full bg-black border border-green-600 p-2 rounded text-green-300 placeholder-green-600" rows="3" placeholder="Bunker number"></textarea>
+    <button class="w-full border border-green-600 py-2 rounded hover:bg-green-700 transition">Join</button>
+  </form>
+</aside>
+
+<!-- chat -->
+<div
+  id="chat"
+  class="fixed bottom-4 left-4 w-[90vw] max-w-sm bg-black border-2 border-green-600 p-4 rounded-md
+         translate-x-[-120%] transition-transform duration-300 z-40 shadow-lg"
+>
+  <button id="closeChatBtn" class="w-full mb-3 border border-green-600 py-2 rounded hover:bg-green-700 transition">
+    Close Comm Terminal
+  </button>
+
+  <div class="h-32 border border-green-600 p-2 mb-2 rounded text-green-300">
+    CHAT LOG...
+  </div>
+  <input class="w-full bg-black border border-green-600 p-2 rounded text-green-300 placeholder-green-600" placeholder="Message" />
+</div>
+
+<!-- BUTTON CLOUD -->
+<div
+  id="buttonCloud"
+  class="fixed top-24 right-4 bg-black border-2 border-green-600 rounded-xl
+         w-32 h-32 flex items-center justify-center cursor-pointer z-50
+         transition-all duration-300 overflow-hidden shadow-lg"
+  title="Open menu/chat"
+>
+  <span class="text-3xl select-none text-green-500">☢</span>
+
+  <div id="cloudButtons" class="hidden flex-col w-48 p-2 gap-2">
+    <button id="openMenuBtn" class="border border-green-600 py-1 rounded hover:bg-green-700 transition">
+      Vault Enrollment
+    </button>
+    <button id="openChatBtn" class="border border-green-600 py-1 rounded hover:bg-green-700 transition">
+      Comm Terminal
+    </button>
+  </div>
+</div>
+
+<!-- Sounds -->
+<audio id="clickSound" src="fallout_shelter_luck.mp3" preload="auto"></audio>
+<audio id="pipboySound" src="fallout_pipboy.mp3" preload="auto"></audio>
+
+<footer class="p-4 border-t border-green-600 text-center text-sm select-none">
+  © VAULT-TEC TERMINAL
+</footer>
+
+<script>
+  const sideMenu = document.getElementById("sideMenu");
+  const chat = document.getElementById("chat");
+  const cloud = document.getElementById("buttonCloud");
+  const cloudBtns = document.getElementById("cloudButtons");
+
+  const clickSound = document.getElementById("clickSound");
+  const pipboySound = document.getElementById("pipboySound");
+
+  // Function to play a click sound, without overlapping
+  function playClickSound() {
+    clickSound.currentTime = 0;
+    clickSound.play();
+  }
+  // Function for PipBoy sound (recordings)
+  function playPipboySound() {
+    pipboySound.currentTime = 0;
+    pipboySound.play();
+  }
+
+  // Opening and closing menu and chat with sound
+  document.getElementById("openMenuBtn").onclick = (e) => {
+    e.stopPropagation();
+    playClickSound();
+    sideMenu.style.transform = "translateY(0)";
+    chat.style.transform = "translateX(-120%)";
+    cloudBtns.classList.add("hidden");
+    cloud.classList.remove("w-40");
+    cloud.classList.add("w-16");
+  };
+  document.getElementById("closeMenuBtn").onclick = () => {
+    playClickSound();
+    sideMenu.style.transform = "translateY(-120%)";
+  };
+
+  document.getElementById("openChatBtn").onclick = (e) => {
+    e.stopPropagation();
+    playClickSound();
+    chat.style.transform = "translateX(0)";
+    sideMenu.style.transform = "translateY(-120%)";
+    cloudBtns.classList.add("hidden");
+    cloud.classList.remove("w-40");
+    cloud.classList.add("w-16");
+  };
+  document.getElementById("closeChatBtn").onclick = () => {
+    playClickSound();
+    chat.style.transform = "translateX(-120%)";
+  };
+
+  // Handling a click on a cloud button with sound
+  cloud.onclick = (e) => {
+    e.stopPropagation();
+    playClickSound();
+    cloudBtns.classList.toggle("hidden");
+    cloud.classList.toggle("w-16");
+    cloud.classList.toggle("w-40");
+  };
+
+  /* COLLAPSE for all blocks with sound for recordings */
+  document.querySelectorAll(".toggle-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const content = btn.nextElementSibling;
+      const icon = btn.querySelector(".toggle-icon");
+      const isOpen = content.classList.contains("open");
+
+      if (isOpen) {
+        content.classList.remove("open");
+        icon.textContent = "▸";
+        btn.setAttribute("aria-expanded", "false");
+      } else {
+        content.classList.add("open");
+        icon.textContent = "▾";
+        btn.setAttribute("aria-expanded", "true");
+      }
+    });
+  });
+
+  // PipBoy sound for specific entries
+  ["record1", "record4", "record7", "record11"].forEach(id => {
+    const btn = document.getElementById(id);
+    if (btn) {
+      btn.addEventListener("click", () => {
+        playPipboySound();
+      });
+    }
+  });
+
+  // Close the cloud buttons when clicking outside of it
+  document.addEventListener("click", () => {
+    cloudBtns.classList.add("hidden");
+    cloud.classList.remove("w-40");
+    cloud.classList.add("w-16");
+  });
+
+  // Audio button (The World On Fire)
+  const audio = document.getElementById('audioPlayer');
+  const btnAudio = document.getElementById('audioToggleBtn');
+
+  btnAudio.addEventListener('click', () => {
+    if (audio.paused) {
+      audio.play();
+      btnAudio.textContent = '🔊 On';
+      btnAudio.setAttribute('aria-pressed', 'true');
+    } else {
+      audio.pause();
+      btnAudio.textContent = '🔈 Off';
+      btnAudio.setAttribute('aria-pressed', 'false');
+    }
+  });
+</script>
+
+</body>
+</html>

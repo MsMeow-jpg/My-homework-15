@@ -1,0 +1,37 @@
+# Fallout Journal
+
+This is a personal digital journal in the Fallout/Vault-Tec style, built using HTML, Tailwind CSS, and JavaScript.
+
+## Description
+
+The project simulates a terminal interface with glitch and CRT effects, has:
+
+- Header with text animations
+- Gallery with pictures
+- YouTube videos
+- Audio player with mute/unmute button
+- Collapse entries (journal entries) with animations and sounds
+- Opening/closing menu and chat terminal with animations and sounds
+- Post-apocalyptic style with green monochrome
+
+## Technologies used
+
+- HTML5
+- Tailwind CSS (via CDN)
+- Pure JavaScript (ES6+)
+- CSS animations for glitch and CRT
+- Embedded audio and video
+
+## How to run
+
+1. Copy all files (HTML, images, audio) to one folder
+2. Open `index.html` in any modern browser (Chrome, Firefox, Edge)
+3. Enjoy interface and test interactivity
+
+## Possible improvements
+
+- Save the state of opening records in localStorage
+- Dark/light theme
+- Add real interactivity to chat (via WebSocket or API)
+- Adaptability for mobile devices
+- Optimize media loading
